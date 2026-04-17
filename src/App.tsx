@@ -16,7 +16,9 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-const BRAND_COLOR = "#1F8FA3";
+const BRAND_COLOR = "#2D5ED3";
+const BRAND_COLOR_LIGHT = "#3A78F2";
+const BRAND_GRADIENT = `linear-gradient(135deg, ${BRAND_COLOR}, ${BRAND_COLOR_LIGHT})`;
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,7 +122,7 @@ export default function App() {
             <button 
               onClick={() => setIsModalOpen(true)}
               className="px-4 py-2.5 md:px-6 md:py-3 rounded-xl text-white font-bold text-sm md:text-base transition-all shadow-lg shadow-brand/20 hover:scale-105 active:scale-95"
-              style={{ backgroundColor: BRAND_COLOR }}
+              style={{ background: BRAND_GRADIENT }}
             >
               Request a Demo
             </button>
@@ -194,7 +196,7 @@ export default function App() {
             <button 
               onClick={() => setIsModalOpen(true)}
               className="px-8 py-4 rounded-xl text-white font-black text-lg shadow-2xl shadow-brand/30 transition-all hover:scale-105 active:scale-95"
-              style={{ backgroundColor: BRAND_COLOR }}
+              style={{ background: BRAND_GRADIENT }}
             >
               Request a Demo
             </button>
@@ -496,7 +498,7 @@ export default function App() {
 
                 <button 
                   className="w-full py-4 rounded-2xl text-white font-black text-xl shadow-2xl shadow-brand/30 transition-all hover:scale-[1.02] active:scale-95"
-                  style={{ backgroundColor: BRAND_COLOR }}
+                  style={{ background: BRAND_GRADIENT }}
                 >
                   Get Started
                 </button>
@@ -527,7 +529,7 @@ export default function App() {
              </p>
              <button 
                className="px-12 py-5 rounded-2xl text-white font-black text-xl shadow-2xl shadow-brand/50 transition-all hover:scale-110 active:scale-95"
-               style={{ backgroundColor: BRAND_COLOR }}
+               style={{ background: BRAND_GRADIENT }}
              >
                Leave Request
              </button>
@@ -582,7 +584,7 @@ export default function App() {
             <button 
               onClick={() => setIsModalOpen(true)}
               className="px-8 py-4 rounded-2xl text-white font-black text-lg md:text-xl shadow-2xl shadow-brand/40 transition-all hover:scale-105 active:scale-95"
-              style={{ backgroundColor: BRAND_COLOR }}
+              style={{ background: BRAND_GRADIENT }}
             >
               Contact Us
             </button>
@@ -678,7 +680,7 @@ export default function App() {
                  </div>
                  <button 
                    className="sm:col-span-2 py-4 rounded-2xl text-white font-black text-xl shadow-2xl transition-all hover:scale-[1.02] active:scale-95 mt-2"
-                   style={{ backgroundColor: BRAND_COLOR }}
+                  style={{ background: BRAND_GRADIENT }}
                  >
                    Send Request
                  </button>
@@ -727,7 +729,10 @@ export default function App() {
           >
             {/* Background Decorative Gradients */}
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-brand/20 blur-[80px] rounded-full pointer-events-none" style={{"--brand": BRAND_COLOR} as any} />
-            <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-80 h-80 bg-[#38BDF8]/10 blur-[100px] rounded-full pointer-events-none" />
+            <div
+              className="absolute bottom-0 left-0 -ml-24 -mb-24 w-80 h-80 blur-[100px] rounded-full pointer-events-none"
+              style={{ backgroundColor: BRAND_COLOR_LIGHT + "1A" }}
+            />
             
             {/* Grid Overlay for texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
@@ -750,7 +755,7 @@ export default function App() {
                   transition={{ delay: 0.1 }}
                 >
                   <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tighter">
-                    Leave your <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-[#38BDF8]" style={{"--brand": BRAND_COLOR} as any}>request</span> now
+                    Leave your <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(90deg, ${BRAND_COLOR}, ${BRAND_COLOR_LIGHT})` }}>request</span> now
                   </h2>
                   <p className="text-white/40 font-medium text-sm md:text-base">We'll contact you within days to discuss your vision.</p>
                 </motion.div>
@@ -813,7 +818,7 @@ export default function App() {
                     type="submit"
                     className="w-full py-4.5 rounded-[22px] text-white font-black text-lg transition-all hover:brightness-110 active:scale-[0.98] shadow-2xl shadow-brand/30 flex items-center justify-center gap-2 group relative overflow-hidden"
                     style={{ 
-                      background: `linear-gradient(135deg, ${BRAND_COLOR}, #38BDF8)` 
+                      background: BRAND_GRADIENT
                     }}
                   >
                     <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
