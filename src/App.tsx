@@ -11,7 +11,6 @@ import {
   TrendingUp,
   Smartphone,
   Zap,
-  Menu,
   ChevronRight,
   X
 } from "lucide-react";
@@ -20,7 +19,6 @@ import { useState, useEffect } from "react";
 const BRAND_COLOR = "#1F8FA3";
 
 export default function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Prevent background scrolling when modal is open
@@ -121,46 +119,17 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="hidden sm:block px-6 py-3 rounded-xl text-white font-bold transition-all shadow-lg shadow-brand/20 hover:scale-105 active:scale-95"
+              className="px-4 py-2.5 md:px-6 md:py-3 rounded-xl text-white font-bold text-sm md:text-base transition-all shadow-lg shadow-brand/20 hover:scale-105 active:scale-95"
               style={{ backgroundColor: BRAND_COLOR }}
             >
               Request a Demo
-            </button>
-            <button className="md:hidden p-2 text-slate-600" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-6 py-6 flex flex-col gap-6 shadow-xl">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-lg font-bold text-slate-700"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </a>
-            ))}
-            <button 
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setIsModalOpen(true);
-              }}
-              className="w-full py-4 rounded-xl text-white font-bold text-lg"
-              style={{ backgroundColor: BRAND_COLOR }}
-            >
-              Request a Demo
-            </button>
-          </div>
-        )}
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen pt-32 pb-24 px-6 overflow-hidden grid-bg">
+      <section className="relative pt-28 md:pt-32 pb-5 md:pb-16 lg:pb-28 lg:min-h-screen px-6 overflow-hidden grid-bg">
         {/* Floating Icons */}
         <div className="absolute inset-0 pointer-events-none hidden md:block">
           {floatingLogos.map((logo, index) => (
@@ -240,7 +209,7 @@ export default function App() {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="h-screen mt-6 md:mt-8 px-4 md:px-8 lg:px-12 py-4 md:py-6 bg-white flex items-center">
+      <section id="benefits" className="mt-4 md:mt-12 lg:mt-10 xl:mt-12 lg:h-screen px-4 md:px-8 lg:px-12 py-14 md:py-16 lg:py-6 bg-white lg:flex lg:items-center">
         <div className="max-w-[1280px] w-full mx-auto">
           <div className="text-center mb-8 md:mb-10">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-4 tracking-tighter leading-tight">
@@ -251,9 +220,9 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-5">
             {/* Left Column */}
-            <div className="flex flex-col gap-4 md:col-span-3">
+            <div className="flex flex-col gap-5 md:col-span-3">
               {/* 30+ Markets */}
               <div className="bg-[#050B15] rounded-[32px] p-6 text-white relative flex flex-col justify-between group min-h-[250px] border border-slate-800 shadow-xl">
                 <div className="flex justify-between items-start">
@@ -315,7 +284,7 @@ export default function App() {
             </div>
 
             {/* Right Column */}
-            <div className="flex flex-col gap-4 md:col-span-3">
+            <div className="flex flex-col gap-5 md:col-span-3">
               {/* 100% Customizable */}
               <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[180px] group">
                 <div className="flex justify-between items-start">
@@ -603,7 +572,7 @@ export default function App() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="h-screen px-4 md:px-8 lg:px-12 py-4 md:py-6 bg-white flex items-center">
+      <section id="faq" className="lg:h-screen px-4 md:px-8 lg:px-12 py-14 md:py-16 lg:py-6 bg-white lg:flex lg:items-center">
         <div className="max-w-[1280px] w-full mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10">
           <div className="lg:w-2/5">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-5 md:mb-6 italic leading-[0.85] tracking-tighter">Frequently <br />Asked <br />Questions</h2>
@@ -619,7 +588,7 @@ export default function App() {
             </button>
           </div>
 
-          <div className="lg:w-3/5 flex flex-col gap-2.5">
+          <div className="lg:w-3/5 flex flex-col gap-3.5 md:gap-3">
             {faqs.map((faq, i) => (
               <div 
                 key={i} 
@@ -662,7 +631,7 @@ export default function App() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="h-screen px-4 md:px-8 lg:px-12 py-4 md:py-6 flex items-center">
+      <section className="lg:h-screen px-4 md:px-8 lg:px-12 py-14 md:py-16 lg:py-6 lg:flex lg:items-center">
         <div className="max-w-[1280px] w-full mx-auto rounded-[40px] overflow-hidden p-6 md:p-8 lg:p-10 border border-cyan-400/15 flex flex-col lg:flex-row gap-8 lg:gap-10 shadow-2xl relative backdrop-blur-sm bg-slate-950/75">
            <div className="absolute inset-0 pointer-events-none">
              <div className="absolute inset-0 bg-linear-to-br from-[#040b24] via-[#03173d] to-[#08243d]" />
