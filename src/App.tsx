@@ -472,6 +472,17 @@ export default function App() {
                whileHover={{ y: -10, scale: 1.01 }}
                className="bg-white rounded-[40px] shadow-2xl shadow-slate-200 overflow-hidden border border-white relative z-10"
             >
+              <div
+                className="absolute top-0 left-8 right-8 h-[2px] rounded-full opacity-90"
+                style={{ background: `linear-gradient(90deg, transparent, ${BRAND_COLOR_LIGHT}, transparent)` }}
+              />
+              <motion.div
+                className="absolute top-0 h-[3px] w-28 rounded-full blur-[1px]"
+                style={{ background: BRAND_GRADIENT }}
+                initial={{ x: "-120%" }}
+                animate={{ x: ["-120%", "520%"] }}
+                transition={{ duration: 3.2, ease: "linear", repeat: Infinity }}
+              />
               <div className="p-10">
                 <div className="flex items-center justify-between mb-8">
                    <div className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-brand border border-brand/5" style={{ color: BRAND_COLOR, backgroundColor: BRAND_COLOR + '11' }}>
