@@ -20,8 +20,65 @@ const BRAND_COLOR = "#2D5ED3";
 const BRAND_COLOR_LIGHT = "#3A78F2";
 const BRAND_GRADIENT = `linear-gradient(135deg, ${BRAND_COLOR}, ${BRAND_COLOR_LIGHT})`;
 
+type LeadFields = {
+  name: string;
+  email: string;
+  phone: string;
+  telegram: string;
+  business: string;
+  why: string;
+};
+
+const emptyLead: LeadFields = {
+  name: "",
+  email: "",
+  phone: "",
+  telegram: "",
+  business: "",
+  why: "",
+};
+
+const MODAL_FORM_FIELDS: Array<{
+  key: keyof LeadFields;
+  label: string;
+  placeholder: string;
+  type: string;
+  full?: boolean;
+}> = [
+  { key: "name", label: "Name", placeholder: "Your full name", type: "text" },
+  { key: "email", label: "Email", placeholder: "you@company.com", type: "email" },
+  { key: "phone", label: "Phone", placeholder: "+1 234 567 890", type: "tel" },
+  { key: "telegram", label: "Telegram / WhatsApp", placeholder: "@username", type: "text" },
+  {
+    key: "business",
+    label: "What's your current business?",
+    placeholder: "e.g. Affiliate, Broker, Fintech...",
+    type: "text",
+    full: true,
+  },
+  {
+    key: "why",
+    label: "Why do you want to launch?",
+    placeholder: "e.g. New revenue stream, monetize traffic...",
+    type: "text",
+    full: true,
+  },
+];
+
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [contactLead, setContactLead] = useState<LeadFields>({ ...emptyLead });
+  const [contactConsent, setContactConsent] = useState(false);
+  const [contactSubmitting, setContactSubmitting] = useState(false);
+  const [contactSuccess, setContactSuccess] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
+
+  const [modalLead, setModalLead] = useState<LeadFields>({ ...emptyLead });
+  const [modalConsent, setModalConsent] = useState(false);
+  const [modalSubmitting, setModalSubmitting] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -35,6 +92,76 @@ export default function App() {
     };
   }, [isModalOpen]);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      setModalSuccess(false);
+      setModalError(null);
+    }
+  }, [isModalOpen]);
+
+  async function submitLead(
+    fields: LeadFields,
+    consent: boolean,
+    source: "contact-section" | "modal",
+    opts: {
+      setSubmitting: (v: boolean) => void;
+      setSuccess: (v: boolean) => void;
+      setError: (v: string | null) => void;
+    }
+  ) {
+    opts.setError(null);
+    opts.setSuccess(false);
+    if (!consent) {
+      opts.setError("Please accept the terms to continue.");
+      return;
+    }
+    if (!fields.name.trim() || !fields.email.trim()) {
+      opts.setError("Name and email are required.");
+      return;
+    }
+    opts.setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...fields,
+          consent: true,
+          source,
+        }),
+      });
+      const raw = await res.text();
+      let data: { error?: string } = {};
+      try {
+        data = JSON.parse(raw) as { error?: string };
+      } catch {
+        /* non-JSON body (e.g. 404 HTML) */
+      }
+      if (!res.ok) {
+        console.error("[NEXA lead form]", res.status, data, raw.slice(0, 500));
+        opts.setError(
+          "Something went wrong. Please try again in a moment."
+        );
+        return;
+      }
+      opts.setSuccess(true);
+      if (source === "contact-section") {
+        setContactLead({ ...emptyLead });
+        setContactConsent(false);
+      } else {
+        setModalLead({ ...emptyLead });
+        setModalConsent(false);
+      }
+    } catch (e) {
+      console.error("[NEXA lead form] network", e);
+      opts.setError(
+        "Something went wrong. Please check your connection and try again."
+      );
+    } finally {
+      opts.setSubmitting(false);
+    }
+  }
+
   const navLinks = [
     { name: "Benefits", href: "#benefits" },
     { name: "Features", href: "#features" },
@@ -43,14 +170,14 @@ export default function App() {
   ];
 
   const floatingLogos = [
-    { src: "/logos/Bitcoin-Logo.png", pos: "top-[28%] left-[14%]", name: "Bitcoin" },
-    { src: "/logos/solana-sol-icon.png", pos: "top-[18%] left-[30%]", name: "Solana" },
-    { src: "/logos/au.png", pos: "top-[18%] right-[30%]", name: "Gold" },
-    { src: "/logos/tesla.png", pos: "top-[28%] right-[14%]", name: "Tesla" },
-    { src: "/logos/nvidia_logo_icon_169902.webp", pos: "bottom-[30%] left-[14%]", name: "NVIDIA" },
-    { src: "/logos/14446160.png", pos: "bottom-[30%] right-[14%]", name: "Market" },
-    { src: "/logos/747.png", pos: "bottom-[6%] left-[30%]", name: "Finance" },
-    { src: "/logos/trading-candle.webp", pos: "bottom-[6%] right-[30%]", name: "Trading" },
+    { src: "/logos/Bitcoin-Logo.png", pos: "top-[24%] left-[22%]", name: "Bitcoin" },
+    { src: "/logos/solana-sol-icon.png", pos: "top-[14%] left-[38%]", name: "Solana" },
+    { src: "/logos/au.png", pos: "top-[14%] right-[38%]", name: "Gold" },
+    { src: "/logos/tesla.png", pos: "top-[24%] right-[22%]", name: "Tesla" },
+    { src: "/logos/nvidia_logo_icon_169902.webp", pos: "bottom-[26%] left-[22%]", name: "NVIDIA" },
+    { src: "/logos/14446160.png", pos: "bottom-[26%] right-[22%]", name: "Market" },
+    { src: "/logos/747.png", pos: "bottom-[12%] left-[38%]", name: "Finance" },
+    { src: "/logos/trading-candle.webp", pos: "bottom-[12%] right-[38%]", name: "Trading" },
   ];
 
   const faqs = [
@@ -138,19 +265,19 @@ export default function App() {
             <motion.div
               key={index}
               initial={{ y: 0 }}
-              animate={{ y: [0, -20, 0] }}
+              animate={{ y: [0, -12, 0] }}
               transition={{ 
                 duration: 5 + Math.random() * 2, 
                 repeat: Infinity, 
                 ease: "easeInOut",
                 delay: index * 0.4 
               }}
-              className={`absolute p-3.5 bg-white border border-slate-200 rounded-xl shadow-lg shadow-slate-200/70 ${logo.pos}`}
+              className={`absolute p-3 bg-white border border-slate-200 rounded-xl shadow-md shadow-slate-200/60 ${logo.pos}`}
             >
               <img
                 src={logo.src}
                 alt={logo.name}
-                className="w-8 h-8 object-contain"
+                className="w-7 h-7 md:w-8 md:h-8 object-contain"
                 referrerPolicy="no-referrer"
               />
             </motion.div>
@@ -660,42 +787,157 @@ export default function App() {
            </div>
            
            <div className="lg:w-1/2 relative z-10 bg-white/[0.02] border border-white/8 rounded-[24px] p-4 md:p-5 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.25)]">
-              <form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {contactSuccess ? (
+                <div className="text-center py-12 px-4">
+                  <p className="text-3xl font-black text-white mb-3 tracking-tight">Thank you!</p>
+                  <p className="text-slate-400 font-medium leading-relaxed text-base max-w-md mx-auto mb-8">
+                    We have received your submission. Our team will reach out to you shortly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setContactSuccess(false);
+                      setContactError(null);
+                    }}
+                    className="px-6 py-3 rounded-xl text-white font-bold text-sm border border-white/15 bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    Submit another request
+                  </button>
+                </div>
+              ) : (
+              <form
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void submitLead(contactLead, contactConsent, "contact-section", {
+                    setSubmitting: setContactSubmitting,
+                    setSuccess: setContactSuccess,
+                    setError: setContactError,
+                  });
+                }}
+              >
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Name</label>
-                   <input type="text" placeholder="Your full name" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="text"
+                     name="name"
+                     autoComplete="name"
+                     value={contactLead.name}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, name: e.target.value }))
+                     }
+                     placeholder="Your full name"
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Email</label>
-                   <input type="email" placeholder="you@company.com" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="email"
+                     name="email"
+                     autoComplete="email"
+                     value={contactLead.email}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, email: e.target.value }))
+                     }
+                     placeholder="you@company.com"
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Phone</label>
-                   <input type="text" placeholder="+1 234 567 890" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="text"
+                     name="phone"
+                     autoComplete="tel"
+                     value={contactLead.phone}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, phone: e.target.value }))
+                     }
+                     placeholder="+1 234 567 890"
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Telegram / WhatsApp</label>
-                   <input type="text" placeholder="@username" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="text"
+                     name="telegram"
+                     value={contactLead.telegram}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, telegram: e.target.value }))
+                     }
+                     placeholder="@username"
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="flex flex-col gap-2 sm:col-span-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">What's your current business?</label>
-                   <input type="text" placeholder="e.g. Affiliate, Broker, Fintech..." className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="text"
+                     name="business"
+                     value={contactLead.business}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, business: e.target.value }))
+                     }
+                     placeholder="e.g. Affiliate, Broker, Fintech..."
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="flex flex-col gap-2 sm:col-span-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Why do you want to launch?</label>
-                   <input type="text" placeholder="e.g. New revenue stream, monetize traffic..." className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input
+                     type="text"
+                     name="why"
+                     value={contactLead.why}
+                     onChange={(e) =>
+                       setContactLead((s) => ({ ...s, why: e.target.value }))
+                     }
+                     placeholder="e.g. New revenue stream, monetize traffic..."
+                     className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
+                     style={{'--brand': BRAND_COLOR} as any}
+                     disabled={contactSubmitting}
+                   />
                  </div>
                  <div className="sm:col-span-2 flex gap-4 mt-1 p-4 bg-slate-900/30 rounded-2xl border border-slate-900">
-                   <input type="checkbox" className="mt-1 accent-brand w-5 h-5 shrink-0" style={{ color: BRAND_COLOR } as any} />
-                   <p className="text-xs text-slate-500 font-medium leading-relaxed">By checking the box I consent to the terms and conditions and privacy policy.</p>
+                   <input
+                     type="checkbox"
+                     id="contact-consent"
+                     checked={contactConsent}
+                     onChange={(e) => setContactConsent(e.target.checked)}
+                     className="mt-1 accent-brand w-5 h-5 shrink-0"
+                     style={{ color: BRAND_COLOR } as any}
+                     disabled={contactSubmitting}
+                   />
+                   <label htmlFor="contact-consent" className="text-xs text-slate-500 font-medium leading-relaxed cursor-pointer">
+                     By checking the box I consent to the terms and conditions and privacy policy.
+                   </label>
                  </div>
-                 <button 
-                   className="sm:col-span-2 py-4 rounded-2xl text-white font-black text-xl shadow-2xl transition-all hover:scale-[1.02] active:scale-95 mt-2"
+                 {contactError && (
+                   <div className="sm:col-span-2 text-sm font-medium">
+                     <p className="text-red-400">{contactError}</p>
+                   </div>
+                 )}
+                 <button
+                   type="submit"
+                   className="sm:col-span-2 py-4 rounded-2xl text-white font-black text-xl shadow-2xl transition-all hover:scale-[1.02] active:scale-95 mt-2 disabled:opacity-60 disabled:pointer-events-none"
                   style={{ background: BRAND_GRADIENT }}
+                  disabled={contactSubmitting}
                  >
-                   Send Request
+                   {contactSubmitting ? "Sending…" : "Send Request"}
                  </button>
               </form>
+              )}
            </div>
         </div>
       </section>
@@ -759,6 +1001,7 @@ export default function App() {
             </button>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 -mr-2 relative z-10">
+              {!modalSuccess && (
               <div className="mb-6 lg:mb-8">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
@@ -771,19 +1014,43 @@ export default function App() {
                   <p className="text-white/40 font-medium text-sm md:text-base">We'll contact you within days to discuss your vision.</p>
                 </motion.div>
               </div>
+              )}
 
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              {modalSuccess ? (
+                <div className="text-center py-10 px-4">
+                  <p className="text-3xl font-black text-white mb-3 tracking-tight">Thank you!</p>
+                  <p className="text-white/50 font-medium leading-relaxed text-base max-w-md mx-auto mb-8">
+                    We have received your submission. Our team will reach out to you shortly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setModalSuccess(false);
+                      setModalError(null);
+                      setIsModalOpen(false);
+                    }}
+                    className="px-8 py-4 rounded-2xl text-white font-black text-lg shadow-2xl transition-all hover:brightness-110"
+                    style={{ background: BRAND_GRADIENT }}
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void submitLead(modalLead, modalConsent, "modal", {
+                    setSubmitting: setModalSubmitting,
+                    setSuccess: setModalSuccess,
+                    setError: setModalError,
+                  });
+                }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                  {[
-                    { label: "Name", placeholder: "Your full name", type: "text" },
-                    { label: "Email", placeholder: "you@company.com", type: "email" },
-                    { label: "Phone", placeholder: "+1 234 567 890", type: "tel" },
-                    { label: "Telegram / WhatsApp", placeholder: "@username", type: "text" },
-                    { label: "What's your current business?", placeholder: "e.g. Affiliate, Broker, Fintech...", type: "text", full: true },
-                    { label: "Why do you want to launch?", placeholder: "e.g. New revenue stream, monetize traffic...", type: "text", full: true }
-                  ].map((field, idx) => (
+                  {MODAL_FORM_FIELDS.map((field, idx) => (
                     <motion.div 
-                      key={field.label} 
+                      key={field.key} 
                       className={`space-y-1.5 ${field.full ? 'md:col-span-2' : ''}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -792,8 +1059,17 @@ export default function App() {
                       <label className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] ml-1">{field.label}</label>
                       <input 
                         type={field.type} 
-                        placeholder={field.placeholder} 
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-3 text-white placeholder:text-white/10 focus:outline-none focus:border-brand/40 focus:bg-white/[0.05] transition-all font-medium text-sm hover:border-white/20 shadow-inner"
+                        placeholder={field.placeholder}
+                        name={field.key}
+                        value={modalLead[field.key]}
+                        onChange={(e) =>
+                          setModalLead((s) => ({
+                            ...s,
+                            [field.key]: e.target.value,
+                          }))
+                        }
+                        disabled={modalSubmitting}
+                        className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-3 text-white placeholder:text-white/10 focus:outline-none focus:border-brand/40 focus:bg-white/[0.05] transition-all font-medium text-sm hover:border-white/20 shadow-inner disabled:opacity-50"
                         style={{"--brand": BRAND_COLOR} as any}
                       />
                     </motion.div>
@@ -810,14 +1086,22 @@ export default function App() {
                     <input 
                       type="checkbox" 
                       id="consent" 
+                      checked={modalConsent}
+                      onChange={(e) => setModalConsent(e.target.checked)}
                       className="w-4 h-4 rounded border-white/10 bg-white/5 checked:bg-brand transition-all cursor-pointer accent-brand" 
-                      required 
+                      disabled={modalSubmitting}
                     />
                   </div>
                   <label htmlFor="consent" className="text-xs text-white/30 leading-tight cursor-pointer hover:text-white/50 transition-colors">
                     By checking the box I consent to the terms and conditions and privacy policy.
                   </label>
                 </motion.div>
+
+                {modalError && (
+                  <div className="text-sm font-medium">
+                    <p className="text-red-300">{modalError}</p>
+                  </div>
+                )}
 
                 <motion.div 
                   className="pt-4 sticky bottom-0 bg-transparent"
@@ -827,17 +1111,19 @@ export default function App() {
                 >
                   <button 
                     type="submit"
-                    className="w-full py-4.5 rounded-[22px] text-white font-black text-lg transition-all hover:brightness-110 active:scale-[0.98] shadow-2xl shadow-brand/30 flex items-center justify-center gap-2 group relative overflow-hidden"
+                    className="w-full py-4.5 rounded-[22px] text-white font-black text-lg transition-all hover:brightness-110 active:scale-[0.98] shadow-2xl shadow-brand/30 flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-60 disabled:pointer-events-none"
                     style={{ 
                       background: BRAND_GRADIENT
                     }}
+                    disabled={modalSubmitting}
                   >
                     <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span>Send Request</span>
+                    <span>{modalSubmitting ? "Sending…" : "Send Request"}</span>
                     <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </button>
                 </motion.div>
               </form>
+              )}
             </div>
           </motion.div>
         </div>
