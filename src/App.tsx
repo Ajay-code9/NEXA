@@ -296,7 +296,7 @@ export default function App() {
             {/* Middle Column - Trading App Display */}
             <div className="bg-slate-950 rounded-[32px] overflow-hidden group relative shadow-2xl h-full min-h-[440px] border border-slate-800 md:col-span-6">
               <img 
-                src="/mainimg1.png" 
+                src="/mainimg1.svg" 
                 alt="Trading Interface" 
                 className="w-full h-full object-contain object-left opacity-85 group-hover:opacity-100 transition-all duration-700"
                 referrerPolicy="no-referrer"
@@ -356,7 +356,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Clean Design */}
-            <div className="md:col-span-4 bg-slate-900 rounded-[40px] p-8 flex flex-col border border-slate-800 shadow-2xl group overflow-hidden min-h-[500px]">
+            <div className="md:col-span-4 bg-slate-900 rounded-[40px] p-8 flex flex-col border border-slate-800 shadow-2xl group overflow-hidden min-h-[400px]">
               <div className="mb-8 relative z-10">
                 <h3 className="text-2xl font-black mb-4">Clean Design</h3>
                 <p className="text-base text-slate-400 font-medium leading-relaxed">A lightweight interface designed to reduce user friction and simplify user experience.</p>
@@ -377,7 +377,7 @@ export default function App() {
 
             <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
               {/* One Mechanic */}
-              <div className="bg-white rounded-[32px] p-5 text-slate-900 flex flex-col justify-between min-h-[160px] shadow-xl border border-slate-50 group hover:shadow-2xl transition-all">
+              <div className="bg-white rounded-[32px] p-5 text-slate-900 flex flex-col justify-between min-h-[125px] shadow-xl border border-slate-50 group hover:shadow-2xl transition-all">
                 <div>
                   <h3 className="text-lg font-black tracking-tight mb-2">One Mechanic</h3>
                   <p className="text-sm text-slate-500 font-medium leading-[1.4]">One trading mechanic: buy and sell in one click. Simple by design.</p>
@@ -388,7 +388,7 @@ export default function App() {
               </div>
 
               {/* High Conversion */}
-              <div className="bg-white rounded-[32px] p-5 text-slate-900 flex flex-col justify-between min-h-[160px] shadow-xl border border-slate-50 group hover:shadow-2xl transition-all">
+              <div className="bg-white rounded-[32px] p-5 text-slate-900 flex flex-col justify-between min-h-[125px] shadow-xl border border-slate-50 group hover:shadow-2xl transition-all">
                 <div>
                   <h3 className="text-lg font-black tracking-tight mb-2">High Conversion</h3>
                   <p className="text-sm text-slate-500 font-medium leading-[1.4]">Simple interface increases conversion from the first interaction.</p>
@@ -399,7 +399,7 @@ export default function App() {
               </div>
 
               {/* Payments Ready */}
-              <div className="bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex flex-col justify-between min-h-[220px]">
+              <div className="bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex flex-col justify-between min-h-[170px]">
                 <div>
                   <h3 className="text-lg font-black tracking-tight mb-2">Payments Ready</h3>
                   <p className="text-sm text-slate-500 font-medium leading-[1.4]">Pre-integrated payment methods for quick deposits.</p>
@@ -414,7 +414,7 @@ export default function App() {
               </div>
 
               {/* Profit Retention */}
-              <div className="bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex items-center gap-5 min-h-[220px]">
+              <div className="bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex items-center gap-5 min-h-[170px]">
                 <div className="relative w-20 h-20 shrink-0">
                   <svg className="w-full h-full transform -rotate-90">
                     <circle cx="40" cy="40" r="35" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-slate-100" />
@@ -439,7 +439,7 @@ export default function App() {
               </div>
 
               {/* Web & Instant App */}
-              <div className="sm:col-span-2 bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex flex-col md:flex-row gap-6 overflow-hidden items-center group relative min-h-[280px]">
+              <div className="sm:col-span-2 bg-white rounded-[32px] p-5 text-slate-900 shadow-xl border border-slate-50 flex flex-col md:flex-row gap-6 overflow-hidden items-center group relative min-h-[215px]">
                   <div className="flex-1 relative z-10">
                     <h3 className="text-xl font-black mb-2 tracking-tight">Web & Instant App</h3>
                     <p className="text-sm text-slate-500 font-medium leading-[1.4] mb-6">Works on every device. Seamless trading experience both web and mobile.</p>
@@ -454,9 +454,9 @@ export default function App() {
                         </div>
                     </div>
                   </div>
-                  <div className="flex-1 h-[200px] flex items-end justify-center transform group-hover:translate-x-1 transition-transform duration-700">
-                    <div className="w-[78%] h-full bg-slate-950 rounded-t-2xl border-x-2 border-t-2 border-slate-100 shadow-xl overflow-hidden relative">
-                      <img src="/mainimg3.svg" className="w-full h-full object-cover" alt="Web and mobile interface preview" />
+                  <div className="flex-1 h-[165px] flex items-end justify-center transform group-hover:translate-x-1 transition-transform duration-700">
+                    <div className="w-[94%] h-full bg-slate-950 rounded-t-2xl border-x-2 border-t-2 border-slate-100 shadow-xl overflow-hidden relative">
+                      <img src="/mainimg3.svg" className="w-full h-full object-contain object-left" alt="Web and mobile interface preview" />
                       <div className="absolute inset-0 bg-brand/5" style={{ backgroundColor: BRAND_COLOR + '0A' }} />
                     </div>
                   </div>
@@ -546,9 +546,9 @@ export default function App() {
       {/* CTA Strip */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-[1280px] mx-auto rounded-[48px] bg-slate-950 relative overflow-hidden p-12 md:p-20 text-center shadow-2xl">
-           <div className="absolute inset-0 opacity-40">
-              <img src="https://picsum.photos/seed/dashboard-bg/1920/1080?blur=5" className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-950/90 to-slate-950/60" />
+           <div className="absolute inset-0">
+              <img src="/bgimg.svg" className="w-full h-full object-cover opacity-70" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-950/65 via-slate-950/45 to-slate-950/30" />
            </div>
            
            <div className="relative z-10">
@@ -663,15 +663,21 @@ export default function App() {
 
       {/* Contact Form Section */}
       <section className="py-24 px-6 md:px-12">
-        <div className="max-w-[1280px] mx-auto bg-slate-950 rounded-[48px] overflow-hidden p-10 md:p-16 border border-slate-900 flex flex-col lg:flex-row gap-16 shadow-2xl">
-           <div className="lg:w-1/2">
+        <div className="max-w-[1280px] mx-auto rounded-[48px] overflow-hidden p-10 md:p-16 border border-cyan-400/15 flex flex-col lg:flex-row gap-16 shadow-2xl relative backdrop-blur-sm bg-slate-950/75">
+           <div className="absolute inset-0 pointer-events-none">
+             <div className="absolute inset-0 bg-linear-to-br from-[#040b24] via-[#03173d] to-[#08243d]" />
+             <div className="absolute -top-24 -left-20 w-96 h-96 rounded-full bg-cyan-400/10 blur-3xl" />
+             <div className="absolute -bottom-28 right-0 w-[26rem] h-[26rem] rounded-full bg-blue-500/10 blur-3xl" />
+             <div className="absolute inset-0 bg-white/[0.02]" />
+           </div>
+           <div className="lg:w-1/2 relative z-10">
              <h2 className="text-6xl font-black text-white mb-8 italic leading-none tracking-tighter">Start your <br />brokerage <br />project</h2>
              <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-sm">
                Share a few details and our managers will prepare a tailored rollout plan for your market.
              </p>
            </div>
            
-           <div className="lg:w-1/2">
+           <div className="lg:w-1/2 relative z-10 bg-white/[0.02] border border-white/8 rounded-[28px] p-5 md:p-6 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.25)]">
               <form className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Name</label>
