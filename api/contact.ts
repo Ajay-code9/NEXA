@@ -1,3 +1,8 @@
+import {
+  normalizeIndianPhoneForSubmit,
+  validateLeadForm,
+} from "../lib/leadValidation";
+
 export const config = { runtime: "edge" };
 
 function json(data: unknown, status = 200) {
@@ -14,8 +19,6 @@ function esc(s: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
-
-const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 function resendErrorMessage(data: Record<string, unknown>): string {
   const m = data.message;
@@ -74,18 +77,30 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: "Invalid JSON body" }, 400);
   }
 
-  const name = String(body.name ?? "").trim();
-  const email = String(body.email ?? "").trim();
-  const phone = String(body.phone ?? "").trim();
-  const telegram = String(body.telegram ?? "").trim();
-  const business = String(body.business ?? "").trim();
-  const why = String(body.why ?? "").trim();
-  const source = String(body.source ?? "unknown").trim();
+  const name = String(body.name ?? "").trim().slice(0, 200);
+  const email = String(body.email ?? "").trim().slice(0, 254);
+  const phone = String(body.phone ?? "").trim().slice(0, 56);
+  const telegram = String(body.telegram ?? "").trim().slice(0, 300);
+  const business = String(body.business ?? "").trim().slice(0, 4000);
+  const why = String(body.why ?? "").trim().slice(0, 4000);
+  const source = String(body.source ?? "unknown").trim().slice(0, 80);
   const consent = Boolean(body.consent);
 
   if (!consent) return json({ error: "Consent is required" }, 400);
   if (!name || !email) return json({ error: "Name and email are required" }, 400);
-  if (!emailOk(email)) return json({ error: "Invalid email address" }, 400);
+
+  const validationError = validateLeadForm({
+    name,
+    email,
+    phone,
+    telegram,
+    business,
+    why,
+  });
+  if (validationError) return json({ error: validationError }, 400);
+
+  const phoneNorm = normalizeIndianPhoneForSubmit(phone);
+  const phoneForMail = phoneNorm || (phone ? phone : "—");
 
   const subject = `[NEXA] New lead — ${esc(name)} (${esc(source)})`;
   const html = `
@@ -94,7 +109,7 @@ export default async function handler(req: Request): Promise<Response> {
     <table style="border-collapse:collapse;font-family:system-ui,sans-serif;font-size:14px">
       <tr><td style="padding:6px 12px 6px 0"><strong>Name</strong></td><td>${esc(name)}</td></tr>
       <tr><td style="padding:6px 12px 6px 0"><strong>Email</strong></td><td>${esc(email)}</td></tr>
-      <tr><td style="padding:6px 12px 6px 0"><strong>Phone</strong></td><td>${esc(phone || "—")}</td></tr>
+      <tr><td style="padding:6px 12px 6px 0"><strong>Phone</strong></td><td>${esc(phoneForMail)}</td></tr>
       <tr><td style="padding:6px 12px 6px 0"><strong>Telegram / WhatsApp</strong></td><td>${esc(telegram || "—")}</td></tr>
       <tr><td style="padding:6px 12px 6px 0"><strong>Current business</strong></td><td>${esc(business || "—")}</td></tr>
       <tr><td style="padding:6px 12px 6px 0;vertical-align:top"><strong>Why launch</strong></td><td>${esc(why || "—")}</td></tr>

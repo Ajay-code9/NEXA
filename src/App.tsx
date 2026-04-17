@@ -15,19 +15,19 @@ import {
   X
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import type { LeadFieldsInput } from "../lib/leadValidation";
+import {
+  getEmailWarning,
+  getPhoneWarning,
+  normalizeIndianPhoneForSubmit,
+  validateLeadForm,
+} from "../lib/leadValidation";
 
 const BRAND_COLOR = "#2D5ED3";
 const BRAND_COLOR_LIGHT = "#3A78F2";
 const BRAND_GRADIENT = `linear-gradient(135deg, ${BRAND_COLOR}, ${BRAND_COLOR_LIGHT})`;
 
-type LeadFields = {
-  name: string;
-  email: string;
-  phone: string;
-  telegram: string;
-  business: string;
-  why: string;
-};
+type LeadFields = LeadFieldsInput;
 
 const emptyLead: LeadFields = {
   name: "",
@@ -44,17 +44,45 @@ const MODAL_FORM_FIELDS: Array<{
   placeholder: string;
   type: string;
   full?: boolean;
+  maxLength?: number;
+  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
 }> = [
-  { key: "name", label: "Name", placeholder: "Your full name", type: "text" },
-  { key: "email", label: "Email", placeholder: "you@company.com", type: "email" },
-  { key: "phone", label: "Phone", placeholder: "+1 234 567 890", type: "tel" },
-  { key: "telegram", label: "Telegram / WhatsApp", placeholder: "@username", type: "text" },
+  {
+    key: "name",
+    label: "Name",
+    placeholder: "Your full name",
+    type: "text",
+    maxLength: 200,
+  },
+  {
+    key: "email",
+    label: "Email",
+    placeholder: "you@company.com",
+    type: "email",
+    maxLength: 254,
+  },
+  {
+    key: "phone",
+    label: "Phone",
+    placeholder: "+1, +44, +971, +91…",
+    type: "tel",
+    maxLength: 28,
+    inputMode: "tel",
+  },
+  {
+    key: "telegram",
+    label: "Telegram / WhatsApp",
+    placeholder: "@username",
+    type: "text",
+    maxLength: 300,
+  },
   {
     key: "business",
     label: "What's your current business?",
     placeholder: "e.g. Affiliate, Broker, Fintech...",
     type: "text",
     full: true,
+    maxLength: 4000,
   },
   {
     key: "why",
@@ -62,6 +90,7 @@ const MODAL_FORM_FIELDS: Array<{
     placeholder: "e.g. New revenue stream, monetize traffic...",
     type: "text",
     full: true,
+    maxLength: 4000,
   },
 ];
 
@@ -119,6 +148,11 @@ export default function App() {
       opts.setError("Name and email are required.");
       return;
     }
+    const validationError = validateLeadForm(fields);
+    if (validationError) {
+      opts.setError(validationError);
+      return;
+    }
     opts.setSubmitting(true);
     try {
       const res = await fetch("/api/contact", {
@@ -126,6 +160,9 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...fields,
+          phone:
+            normalizeIndianPhoneForSubmit(fields.phone) ||
+            fields.phone.trim().slice(0, 56),
           consent: true,
           source,
         }),
@@ -169,15 +206,52 @@ export default function App() {
     { name: "FAQ", href: "#faq" },
   ];
 
+  const contactEmailWarning = getEmailWarning(contactLead.email);
+  const modalEmailWarning = getEmailWarning(modalLead.email);
+  const contactPhoneWarning = getPhoneWarning(contactLead.phone);
+  const modalPhoneWarning = getPhoneWarning(modalLead.phone);
+
   const floatingLogos = [
-    { src: "/logos/Bitcoin-Logo.png", pos: "top-[24%] left-[22%]", name: "Bitcoin" },
-    { src: "/logos/solana-sol-icon.png", pos: "top-[14%] left-[38%]", name: "Solana" },
-    { src: "/logos/au.png", pos: "top-[14%] right-[38%]", name: "Gold" },
-    { src: "/logos/tesla.png", pos: "top-[24%] right-[22%]", name: "Tesla" },
-    { src: "/logos/nvidia_logo_icon_169902.webp", pos: "bottom-[26%] left-[22%]", name: "NVIDIA" },
-    { src: "/logos/14446160.png", pos: "bottom-[26%] right-[22%]", name: "Market" },
-    { src: "/logos/747.png", pos: "bottom-[12%] left-[38%]", name: "Finance" },
-    { src: "/logos/trading-candle.webp", pos: "bottom-[12%] right-[38%]", name: "Trading" },
+    {
+      src: "/logos/Bitcoin-Logo.png",
+      pos: "top-[6%] left-[2%] md:top-[24%] md:left-[22%]",
+      name: "Bitcoin",
+    },
+    {
+      src: "/logos/solana-sol-icon.png",
+      pos: "top-[2%] left-[26%] md:top-[14%] md:left-[38%]",
+      name: "Solana",
+    },
+    {
+      src: "/logos/au.png",
+      pos: "top-[2%] right-[26%] md:top-[14%] md:right-[38%]",
+      name: "Gold",
+    },
+    {
+      src: "/logos/tesla.png",
+      pos: "top-[6%] right-[2%] md:top-[24%] md:right-[22%]",
+      name: "Tesla",
+    },
+    {
+      src: "/logos/nvidia_logo_icon_169902.webp",
+      pos: "bottom-[28%] left-[2%] md:bottom-[26%] md:left-[22%]",
+      name: "NVIDIA",
+    },
+    {
+      src: "/logos/14446160.png",
+      pos: "bottom-[28%] right-[2%] md:bottom-[26%] md:right-[22%]",
+      name: "Market",
+    },
+    {
+      src: "/logos/747.png",
+      pos: "bottom-[6%] left-[26%] md:bottom-[12%] md:left-[38%]",
+      name: "Finance",
+    },
+    {
+      src: "/logos/trading-candle.webp",
+      pos: "bottom-[6%] right-[26%] md:bottom-[12%] md:right-[38%]",
+      name: "Trading",
+    },
   ];
 
   const faqs = [
@@ -260,7 +334,7 @@ export default function App() {
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-32 pb-5 md:pb-16 lg:pb-28 lg:min-h-screen px-6 overflow-hidden grid-bg">
         {/* Floating Icons */}
-        <div className="absolute inset-0 pointer-events-none hidden md:block">
+        <div className="absolute inset-0 pointer-events-none block opacity-90 md:opacity-100">
           {floatingLogos.map((logo, index) => (
             <motion.div
               key={index}
@@ -272,12 +346,12 @@ export default function App() {
                 ease: "easeInOut",
                 delay: index * 0.4 
               }}
-              className={`absolute p-3 bg-white border border-slate-200 rounded-xl shadow-md shadow-slate-200/60 ${logo.pos}`}
+              className={`absolute p-2 md:p-3 bg-white/95 md:bg-white backdrop-blur-[6px] border border-slate-200/90 rounded-lg md:rounded-xl shadow-md shadow-slate-300/40 md:shadow-slate-200/60 ring-1 ring-slate-200/60 ${logo.pos}`}
             >
               <img
                 src={logo.src}
                 alt={logo.name}
-                className="w-7 h-7 md:w-8 md:h-8 object-contain"
+                className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 object-contain"
                 referrerPolicy="no-referrer"
               />
             </motion.div>
@@ -827,6 +901,7 @@ export default function App() {
                        setContactLead((s) => ({ ...s, name: e.target.value }))
                      }
                      placeholder="Your full name"
+                     maxLength={200}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
@@ -843,26 +918,39 @@ export default function App() {
                        setContactLead((s) => ({ ...s, email: e.target.value }))
                      }
                      placeholder="you@company.com"
+                     maxLength={254}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
                    />
+                   {contactEmailWarning && (
+                     <p className="text-[11px] text-amber-400/95 leading-snug">
+                       {contactEmailWarning}
+                     </p>
+                   )}
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Phone</label>
                    <input
-                     type="text"
+                     type="tel"
                      name="phone"
                      autoComplete="tel"
+                     inputMode="tel"
                      value={contactLead.phone}
                      onChange={(e) =>
                        setContactLead((s) => ({ ...s, phone: e.target.value }))
                      }
-                     placeholder="+1 234 567 890"
+                     placeholder="Include country code (+1, +44, +91…)"
+                     maxLength={28}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
                    />
+                   {contactPhoneWarning && (
+                     <p className="text-[11px] text-amber-400/95 leading-snug">
+                       {contactPhoneWarning}
+                     </p>
+                   )}
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Telegram / WhatsApp</label>
@@ -874,6 +962,7 @@ export default function App() {
                        setContactLead((s) => ({ ...s, telegram: e.target.value }))
                      }
                      placeholder="@username"
+                     maxLength={300}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
@@ -889,6 +978,7 @@ export default function App() {
                        setContactLead((s) => ({ ...s, business: e.target.value }))
                      }
                      placeholder="e.g. Affiliate, Broker, Fintech..."
+                     maxLength={4000}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
@@ -904,6 +994,7 @@ export default function App() {
                        setContactLead((s) => ({ ...s, why: e.target.value }))
                      }
                      placeholder="e.g. New revenue stream, monetize traffic..."
+                     maxLength={4000}
                      className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base disabled:opacity-50"
                      style={{'--brand': BRAND_COLOR} as any}
                      disabled={contactSubmitting}
@@ -1069,9 +1160,30 @@ export default function App() {
                           }))
                         }
                         disabled={modalSubmitting}
+                        maxLength={field.maxLength}
+                        inputMode={field.inputMode}
+                        autoComplete={
+                          field.key === "name"
+                            ? "name"
+                            : field.key === "email"
+                              ? "email"
+                              : field.key === "phone"
+                                ? "tel"
+                                : "off"
+                        }
                         className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-3 text-white placeholder:text-white/10 focus:outline-none focus:border-brand/40 focus:bg-white/[0.05] transition-all font-medium text-sm hover:border-white/20 shadow-inner disabled:opacity-50"
                         style={{"--brand": BRAND_COLOR} as any}
                       />
+                      {field.key === "email" && modalEmailWarning && (
+                        <p className="text-[11px] text-amber-300/90 leading-snug px-1">
+                          {modalEmailWarning}
+                        </p>
+                      )}
+                      {field.key === "phone" && modalPhoneWarning && (
+                        <p className="text-[11px] text-amber-300/90 leading-snug px-1">
+                          {modalPhoneWarning}
+                        </p>
+                      )}
                     </motion.div>
                   ))}
                 </div>
