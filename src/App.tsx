@@ -84,7 +84,7 @@ export default function App() {
     }
   ];
 
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -160,7 +160,7 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden grid-bg">
+      <section className="relative min-h-screen pt-32 pb-24 px-6 overflow-hidden grid-bg">
         {/* Floating Icons */}
         <div className="absolute inset-0 pointer-events-none hidden md:block">
           {floatingLogos.map((logo, index) => (
@@ -240,31 +240,31 @@ export default function App() {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="py-24 px-6 bg-white">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tighter leading-tight">
+      <section id="benefits" className="h-screen mt-6 md:mt-8 px-4 md:px-8 lg:px-12 py-4 md:py-6 bg-white flex items-center">
+        <div className="max-w-[1280px] w-full mx-auto">
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-4 tracking-tighter leading-tight">
               A premium launch model with less friction
             </h2>
-            <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
               High-conversion brokerage infrastructure focused on speed, clarity, and practical execution.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
             {/* Left Column */}
-            <div className="flex flex-col gap-6 md:col-span-3">
+            <div className="flex flex-col gap-4 md:col-span-3">
               {/* 30+ Markets */}
-              <div className="bg-[#050B15] rounded-[32px] p-8 text-white relative flex flex-col justify-between group min-h-[340px] border border-slate-800 shadow-xl">
+              <div className="bg-[#050B15] rounded-[32px] p-6 text-white relative flex flex-col justify-between group min-h-[250px] border border-slate-800 shadow-xl">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-5xl font-black" style={{ color: BRAND_COLOR }}>30+</h3>
+                  <h3 className="text-4xl font-black" style={{ color: BRAND_COLOR }}>30+</h3>
                   <ArrowUpRight className="w-8 h-8 text-slate-500 group-hover:text-white transition-colors" />
                 </div>
-                <div className="mt-8">
+                <div className="mt-5">
                   <h4 className="text-xl font-black mb-2">Popular Markets</h4>
-                  <p className="text-slate-400 text-base leading-relaxed font-medium">Forex, Crypto, Stocks, Commodities — curated for maximum trader engagement.</p>
+                  <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium">Forex, Crypto, Stocks, Commodities — curated for maximum trader engagement.</p>
                 </div>
-                <div className="flex gap-3 mt-8">
+                <div className="flex gap-3 mt-5">
                    {[
                      { icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png", bg: "bg-orange-500/10" },
                      { icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png", bg: "bg-blue-500/10" },
@@ -279,7 +279,7 @@ export default function App() {
               </div>
 
               {/* Pre-integrated PSPs */}
-              <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[240px] group">
+              <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[180px] group">
                 <div className="flex justify-between items-start">
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <CreditCard className="w-8 h-8 text-brand" style={{ color: BRAND_COLOR }} />
@@ -294,7 +294,7 @@ export default function App() {
             </div>
 
             {/* Middle Column - Trading App Display */}
-            <div className="bg-slate-950 rounded-[32px] overflow-hidden group relative shadow-2xl h-full min-h-[440px] border border-slate-800 md:col-span-6">
+            <div className="bg-slate-950 rounded-[32px] overflow-hidden group relative shadow-2xl h-full min-h-[360px] border border-slate-800 md:col-span-6">
               <img 
                 src="/mainimg1.svg" 
                 alt="Trading Interface" 
@@ -315,26 +315,26 @@ export default function App() {
             </div>
 
             {/* Right Column */}
-            <div className="flex flex-col gap-6 md:col-span-3">
+            <div className="flex flex-col gap-4 md:col-span-3">
               {/* 100% Customizable */}
-              <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[240px] group">
+              <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[180px] group">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-5xl font-black" style={{ color: BRAND_COLOR }}>100%</h3>
+                  <h3 className="text-4xl font-black" style={{ color: BRAND_COLOR }}>100%</h3>
                   <ArrowUpRight className="w-6 h-6 text-slate-300 group-hover:text-brand transition-colors" style={{'--brand': BRAND_COLOR} as any} />
                 </div>
-                <div className="mt-8">
+                <div className="mt-5">
                   <h4 className="text-xl font-black mb-2">Customizable</h4>
                   <p className="text-slate-500 text-base leading-relaxed font-medium">Your brand, your logo, your domain — fully white-labeled from day one.</p>
                 </div>
               </div>
 
               {/* 0 License Needed */}
-              <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[260px] group">
+              <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-lg flex flex-col justify-between min-h-[190px] group">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-5xl font-black" style={{ color: BRAND_COLOR }}>0</h3>
+                  <h3 className="text-4xl font-black" style={{ color: BRAND_COLOR }}>0</h3>
                   <ArrowUpRight className="w-6 h-6 text-slate-300 group-hover:text-brand transition-colors" style={{'--brand': BRAND_COLOR} as any} />
                 </div>
-                <div className="mt-8">
+                <div className="mt-5">
                   <h4 className="text-xl font-black mb-2">License Needed</h4>
                   <p className="text-slate-500 leading-relaxed font-medium text-base">We cover the complete legal and regulatory structure for you.</p>
                 </div>
@@ -603,32 +603,32 @@ export default function App() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-24 px-6 bg-white">
-        <div className="max-w-[1280px] mx-auto flex flex-col lg:flex-row gap-16">
+      <section id="faq" className="h-screen px-4 md:px-8 lg:px-12 py-4 md:py-6 bg-white flex items-center">
+        <div className="max-w-[1280px] w-full mx-auto flex flex-col lg:flex-row gap-8 lg:gap-10">
           <div className="lg:w-2/5">
-            <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8 italic leading-[0.85] tracking-tighter">Frequently <br />Asked <br />Questions</h2>
-            <p className="text-lg md:text-xl text-slate-500 mb-12 leading-relaxed font-medium">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-5 md:mb-6 italic leading-[0.85] tracking-tighter">Frequently <br />Asked <br />Questions</h2>
+            <p className="text-base md:text-lg text-slate-500 mb-7 md:mb-8 leading-relaxed font-medium">
               Can't find the answer you're looking for? Reach out to our team — we're happy to help.
             </p>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="px-10 py-5 rounded-2xl text-white font-black text-xl shadow-2xl shadow-brand/40 transition-all hover:scale-110 active:scale-95"
+              className="px-8 py-4 rounded-2xl text-white font-black text-lg md:text-xl shadow-2xl shadow-brand/40 transition-all hover:scale-105 active:scale-95"
               style={{ backgroundColor: BRAND_COLOR }}
             >
               Contact Us
             </button>
           </div>
 
-          <div className="lg:w-3/5 flex flex-col gap-3">
+          <div className="lg:w-3/5 flex flex-col gap-2.5">
             {faqs.map((faq, i) => (
               <div 
                 key={i} 
                 className="group cursor-pointer"
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
-                <div className={`bg-white border-2 rounded-[24px] p-5 transition-all ${openFaq === i ? 'border-slate-200 shadow-xl shadow-slate-100/80' : 'border-slate-50 hover:border-slate-200 hover:shadow-lg'}`}>
+                <div className={`bg-white border-2 rounded-[20px] p-4 transition-all ${openFaq === i ? 'border-slate-200 shadow-xl shadow-slate-100/80' : 'border-slate-50 hover:border-slate-200 hover:shadow-lg'}`}>
                   <div className="flex items-center justify-between">
-                    <span className={`text-lg font-black tracking-tight transition-colors ${openFaq === i ? 'text-brand' : 'text-slate-800'}`} style={{ color: openFaq === i ? BRAND_COLOR : undefined }}>
+                    <span className={`text-base md:text-lg font-black tracking-tight transition-colors ${openFaq === i ? 'text-brand' : 'text-slate-800'}`} style={{ color: openFaq === i ? BRAND_COLOR : undefined }}>
                       {faq.q}
                     </span>
                     <div 
@@ -662,8 +662,8 @@ export default function App() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-24 px-6 md:px-12">
-        <div className="max-w-[1280px] mx-auto rounded-[48px] overflow-hidden p-10 md:p-16 border border-cyan-400/15 flex flex-col lg:flex-row gap-16 shadow-2xl relative backdrop-blur-sm bg-slate-950/75">
+      <section className="h-screen px-4 md:px-8 lg:px-12 py-4 md:py-6 flex items-center">
+        <div className="max-w-[1280px] w-full mx-auto rounded-[40px] overflow-hidden p-6 md:p-8 lg:p-10 border border-cyan-400/15 flex flex-col lg:flex-row gap-8 lg:gap-10 shadow-2xl relative backdrop-blur-sm bg-slate-950/75">
            <div className="absolute inset-0 pointer-events-none">
              <div className="absolute inset-0 bg-linear-to-br from-[#040b24] via-[#03173d] to-[#08243d]" />
              <div className="absolute -top-24 -left-20 w-96 h-96 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -671,44 +671,44 @@ export default function App() {
              <div className="absolute inset-0 bg-white/[0.02]" />
            </div>
            <div className="lg:w-1/2 relative z-10">
-             <h2 className="text-6xl font-black text-white mb-8 italic leading-none tracking-tighter">Start your <br />brokerage <br />project</h2>
-             <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-sm">
+             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-5 md:mb-6 italic leading-[0.9] tracking-tighter">Start your <br />brokerage <br />project</h2>
+             <p className="text-base md:text-lg text-slate-400 font-medium leading-relaxed max-w-sm">
                Share a few details and our managers will prepare a tailored rollout plan for your market.
              </p>
            </div>
            
-           <div className="lg:w-1/2 relative z-10 bg-white/[0.02] border border-white/8 rounded-[28px] p-5 md:p-6 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.25)]">
-              <form className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+           <div className="lg:w-1/2 relative z-10 bg-white/[0.02] border border-white/8 rounded-[24px] p-4 md:p-5 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.25)]">
+              <form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Name</label>
-                   <input type="text" placeholder="Your full name" className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="text" placeholder="Your full name" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Email</label>
-                   <input type="email" placeholder="you@company.com" className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="email" placeholder="you@company.com" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Phone</label>
-                   <input type="text" placeholder="+1 234 567 890" className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="text" placeholder="+1 234 567 890" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
                  <div className="flex flex-col gap-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Telegram / WhatsApp</label>
-                   <input type="text" placeholder="@username" className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="text" placeholder="@username" className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
                  <div className="flex flex-col gap-2 sm:col-span-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">What's your current business?</label>
-                   <input type="text" placeholder="e.g. Affiliate, Broker, Fintech..." className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="text" placeholder="e.g. Affiliate, Broker, Fintech..." className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
                  <div className="flex flex-col gap-2 sm:col-span-2">
                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Why do you want to launch?</label>
-                   <input type="text" placeholder="e.g. New revenue stream, monetize traffic..." className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
+                   <input type="text" placeholder="e.g. New revenue stream, monetize traffic..." className="bg-slate-900/50 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-brand font-bold text-base" style={{'--brand': BRAND_COLOR} as any} />
                  </div>
-                 <div className="sm:col-span-2 flex gap-4 mt-2 p-5 bg-slate-900/30 rounded-2xl border border-slate-900">
+                 <div className="sm:col-span-2 flex gap-4 mt-1 p-4 bg-slate-900/30 rounded-2xl border border-slate-900">
                    <input type="checkbox" className="mt-1 accent-brand w-5 h-5 shrink-0" style={{ color: BRAND_COLOR } as any} />
                    <p className="text-xs text-slate-500 font-medium leading-relaxed">By checking the box I consent to the terms and conditions and privacy policy.</p>
                  </div>
                  <button 
-                   className="sm:col-span-2 py-5 rounded-2xl text-white font-black text-xl shadow-2xl transition-all hover:scale-[1.02] active:scale-95 mt-4"
+                   className="sm:col-span-2 py-4 rounded-2xl text-white font-black text-xl shadow-2xl transition-all hover:scale-[1.02] active:scale-95 mt-2"
                    style={{ backgroundColor: BRAND_COLOR }}
                  >
                    Send Request
